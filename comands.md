@@ -1,4 +1,5 @@
-# Comandos de Nest JS
+
+## Comandos de Nest JS
 
 ### Creacion de nuevo proyecto
 ```bash
@@ -17,4 +18,11 @@ Este comando crea un servicio, un modulo y un controlador nuevo
 
 ```bash
 nest g res --no-spec
+```
+
+## Comandos de Prisma
+
+### Crear migracion
+```bash
+npx prisma migrate dev
 ```
