@@ -3,6 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { convertToSlug } from 'src/common/helpers';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ProductsService {
@@ -18,7 +19,10 @@ export class ProductsService {
     })
 
     if (productExists) {
-      throw new BadRequestException("Ya se registro un producto con ese nombre");
+      throw new RpcException({
+        statusCode: 400,
+        message: "El producto ya existe"
+      });
     }
 
     const product = await this.prisma.products.create({
@@ -52,7 +56,10 @@ export class ProductsService {
     })
 
     if (!product) {
-      throw new NotFoundException("No se encontro el producto");
+      throw new RpcException({
+        statusCode: 404,
+        message: "No se encontro el producto"
+      });
     }
 
     return {
@@ -72,7 +79,10 @@ export class ProductsService {
 
 
     if (!productExists) {
-      throw new NotFoundException("No se encontro el producto a actualizar");
+      throw new RpcException({
+        statusCode: 404,
+        message: "No se encontro el producto"
+      });
     }
 
     if (updateProductDto.name) {
@@ -106,7 +116,10 @@ export class ProductsService {
     })
 
     if (!productExists) {
-      throw new NotFoundException("No se encontro el producto");
+      throw new RpcException({
+        statusCode: 404,
+        message: "No se encontro el producto"
+      });
     }
 
     await this.prisma.products.delete({
